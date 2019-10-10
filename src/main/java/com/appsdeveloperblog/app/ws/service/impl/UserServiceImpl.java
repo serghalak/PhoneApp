@@ -1,5 +1,7 @@
 package com.appsdeveloperblog.app.ws.service.impl;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,13 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	
 	@Override
-	public UserDto createUser(UserDto user) {
+	public UserDto createUser(UserDto user) throws SQLException {
 		// TODO Auto-generated method stub
+		
+		if(userRepository.findUserByEmail(user.getEmail())!=null) {
+			throw new SQLException("duplicate user");
+		}
+		
 		
 		UserEntity userEntity=new UserEntity();
 		

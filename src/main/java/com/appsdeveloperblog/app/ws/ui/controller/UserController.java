@@ -1,5 +1,7 @@
 package com.appsdeveloperblog.app.ws.ui.controller;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +36,13 @@ public class UserController {
 		UserRest returnValue=new UserRest();
 		UserDto userDto=new UserDto();
 		BeanUtils.copyProperties(userDetails, userDto);
-		UserDto createdUser=userService.createUser(userDto);
+		UserDto createdUser=null;
+		try {
+			createdUser = userService.createUser(userDto);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		BeanUtils.copyProperties(createdUser, returnValue);
 		
 		return returnValue;
