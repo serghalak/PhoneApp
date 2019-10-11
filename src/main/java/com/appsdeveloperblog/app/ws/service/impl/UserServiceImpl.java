@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.appsdeveloperblog.app.ws.UserRepository;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appsdeveloperblog.app.ws.service.UserService;
+import com.appsdeveloperblog.app.ws.shared.Utils;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 
 @Service
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private Utils utils;
 	
 	@Override
 	public UserDto createUser(UserDto user) throws SQLException {
@@ -30,7 +34,7 @@ public class UserServiceImpl implements UserService {
 		
 		BeanUtils.copyProperties(user, userEntity);
 		userEntity.setEncryptedPassword("cript");
-		userEntity.setUserId("id: " + user.getId());
+		userEntity.setUserId(utils.generateUserId(30));
 		UserEntity userSaved=userRepository.save(userEntity);
 		UserDto savedUserDto=new UserDto(); 
 		BeanUtils.copyProperties(userSaved, savedUserDto);
